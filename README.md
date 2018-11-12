@@ -1,2 +1,3 @@
 # Torbjorn.VMWare
 
+Exploring powershell...
