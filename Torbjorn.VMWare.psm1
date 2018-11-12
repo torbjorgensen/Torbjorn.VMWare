@@ -27,6 +27,7 @@ function Get-VMsWithSnapshots {
         [string]$Server
     )
 
+
     BEGIN {
         Import-Module VMware.VimAutomation.Core
 
@@ -38,6 +39,7 @@ function Get-VMsWithSnapshots {
             Write-Error "Could not connect to vCenter server at $Server"
         }
     }
+
 
     PROCESS {
         if ($Null -ne $vcsaConnection)
@@ -88,6 +90,7 @@ function Get-VMsWithSnapshots {
         }
     }
 
+    
     END {
         try {
             Write-Verbose "Diconnecting from vcenter server"
