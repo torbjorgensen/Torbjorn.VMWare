@@ -15,10 +15,10 @@ BEGIN {
 
     $Config = @{
         
-        vcsaServer="vcsa.torbjorgensen.no"
-        emailSender="powershell@torbjorgensen.no"
-        emailRepicent="torb.jorgensen@gmail.com"    
-        smtpServer="smtp.ntebb.no"
+        vcsaServer=""
+        emailSender=""
+        emailRepicent=""    
+        smtpServer=""
         headerFile="headerTemplate.html"
 
     }
