@@ -51,7 +51,11 @@ function Get-VMsWithSnapshots {
                 try {
                     Write-Verbose "Checking $vm for snapshots..."
 
-                    $count = Get-Snapshot $vm.Name | Measure-Object | Select-Object -expand Count
+                    # TODO: add sizeMB
+                    $snapshots = Get-Snapshot $vm.Name
+                    $count = $snapshots | Measure-Object | Select-Object -expand Count
+                    $sizeMB = $snapshots | Select-Object -expand SizeMB | Measure-Object -sum | Select-Object -expand Sum
+
                     if ($count -is [int32] -and $count -gt 0)
                     {
                         # VM have snapshots
@@ -60,6 +64,7 @@ function Get-VMsWithSnapshots {
                                     VMHost = $vm.VMHost
                                     Folder = $vm.Folder
                                     PowerState = $vm.PowerState
+                                    SizeMB = $sizeMB
                                     Count = $count}
                     } else {
                         # VM have no snapshots
@@ -67,6 +72,7 @@ function Get-VMsWithSnapshots {
                                     VMHost = $vm.VMHost
                                     Folder = $vm.Folder
                                     PowerState = $vm.PowerState
+                                    SizeMB = 0
                                     Count = 0}
                     }
                 } catch {
@@ -75,15 +81,10 @@ function Get-VMsWithSnapshots {
                                 VMHost = $null
                                 Folder = $null
                                 PowerState = $null
+                                SizeMB = 0
                                 Count = 0}
                 } finally {
-                    $obj = New-Object -TypeName PSObject 
-                    $obj | Add-Member -MemberType NoteProperty -Name Name -value $result.Name
-                    $obj | Add-Member -MemberType NoteProperty -Name Count -value $result.Count
-                    $obj | Add-Member -MemberType NoteProperty -Name VMHost -value $result.VMHost
-                    $obj | Add-Member -MemberType NoteProperty -Name Folder -value $result.Folder
-                    $obj | Add-Member -MemberType NoteProperty -Name PowerState -value $result.PowerState
-
+                    $obj = New-Object -TypeName PSObject  -property $result
                     Write-Output $obj
                 }
             }
