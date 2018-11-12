@@ -28,6 +28,8 @@ function Get-VMsWithSnapshots {
     )
 
     BEGIN {
+        Import-Module VMware.VimAutomation.Core
+
         # open connection to vcenter server
         try {
             Write-Verbose "Opening connection to vCenter Server at $Server"
@@ -46,9 +48,8 @@ function Get-VMsWithSnapshots {
             foreach ($vm in $vms) {
                 try {
                     Write-Verbose "Checking $vm for snapshots..."
-                    $result = Get-Snapshot $vm.Name
-                    $count  = Measure-Object -InputObject $result | Select-Object -expand Count
 
+                    $count = Get-Snapshot $vm.Name | Measure-Object | Select-Object -expand Count
                     if ($count -is [int32] -and $count -gt 0)
                     {
                         # VM have snapshots
